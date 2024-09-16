@@ -1,0 +1,95 @@
+/* Estilo del div que actúa como botón */
+.wishlist-toggle {
+    position: relative;
+    background-color: #f5f5f574;
+    /* Fondo constante */
+    border-radius: 50%;
+    /* Hacer el div circular */
+    width: 50px;
+    /* Ajusta el tamaño del div */
+    height: 50px;
+    /* Ajusta el tamaño del div */
+    display: flex;
+    justify-content: center;
+    /* Centrar horizontalmente el ícono */
+    align-items: center;
+    /* Centrar verticalmente el ícono */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    /* Suave transición de sombra */
+}
+
+/* SVG centrado */
+.wishlist-icon {
+    transition: fill 0.3s ease;
+    /* Transición suave en el color del SVG */
+}
+
+/* Tooltip oculto por defecto */
+.wishlist-toggle .tooltip-text {
+    visibility: hidden;
+    font-size: .7em;
+    width: 120px;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 9999 !important;
+}
+
+/* Flecha del tooltip */
+.wishlist-toggle .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
+}
+
+/* Mostrar tooltip al hacer hover */
+/*.wishlist-toggle:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}*/
+
+/* Estilo para cuando un ítem está en la lista de favoritos */
+.wishlist-toggle.in-wishlist svg .wishlist-heart {
+    fill: #c0392b;
+    /* Corazón lleno */
+    stroke: none;
+    /* Sin borde */
+}
+
+/* Estilo por defecto cuando el ítem no está en favoritos */
+.wishlist-toggle svg .wishlist-heart {
+    fill: none;
+    /* Corazón vacío */
+    stroke: #c0392b;
+    /* Borde rojo */
+}
+
+.tooltip-text-portal {
+    position: absolute;
+    /* Se posiciona fuera del flujo normal */
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 9999;
+    /* Asegura que esté por encima de todo */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
