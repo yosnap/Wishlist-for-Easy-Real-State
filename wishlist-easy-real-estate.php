@@ -53,6 +53,12 @@ add_action('wp_enqueue_scripts', 'wishlist_enqueue_styles');
 function wishlist_enqueue_scripts()
 {
     wp_enqueue_script('wishlist-js', plugin_dir_url(__FILE__) . 'wishlist.js', array('jquery'), null, true);
+
+    // Localizar el nonce y la URL AJAX para usarlos en el script JS
+    wp_localize_script('wishlist-js', 'wishlistData', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('wishlist_nonce') // Generar el nonce
+    ]);
 }
 add_action('wp_enqueue_scripts', 'wishlist_enqueue_scripts');
 
@@ -69,6 +75,12 @@ if (session_status() == PHP_SESSION_NONE) {
 // Función para procesar los IDs de favoritos y almacenarlos en la sesión
 function set_wishlist_ids_in_session()
 {
+    // Verificar el nonce de seguridad
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wishlist_nonce')) {
+        wp_send_json_error('Permisos insuficientes - Nonce inválido');
+        wp_die();
+    }
+
     if (isset($_POST['wishlist_ids'])) {
         $wishlist_ids = json_decode(stripslashes($_POST['wishlist_ids']), true);
 
@@ -82,8 +94,6 @@ function set_wishlist_ids_in_session()
         wp_send_json_error('No se recibieron IDs.');
     }
 }
-
-
 
 // Registrar las funciones AJAX
 add_action('wp_ajax_set_wishlist_ids', 'set_wishlist_ids_in_session');

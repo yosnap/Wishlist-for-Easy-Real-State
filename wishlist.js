@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const propertyId = wishlistBtn.getAttribute("data-id");
     const tooltip = wishlistBtn.querySelector(".tooltip-text");
 
-    // Crear un portal para el tooltip y agregarlo al body
+    // Create a portal for the tooltip and add it to the body
     const tooltipPortal = document.createElement("div");
     tooltipPortal.classList.add("tooltip-text-portal");
     document.body.appendChild(tooltipPortal);
@@ -35,13 +35,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     wishlistBtn.addEventListener("click", function (event) {
-      // Prevent the default action (if inside an <a> tag) and stop propagation to parent elements
-      event.preventDefault(); // Prevents following the <a> link if clicked
-      event.stopPropagation(); // Prevents the event from propagating up the DOM
+      event.preventDefault(); // Prevent following <a> link
+      event.stopPropagation(); // Prevent propagation to parent elements
     });
 
+    // Load the wishlist from localStorage
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
+    // Update the button class and tooltip based on whether the item is in the wishlist
     if (wishlist.includes(propertyId)) {
       wishlistBtn.classList.add("in-wishlist");
       updateTooltipText(true);
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
       const isInWishlist = wishlist.includes(propertyId);
 
+      // Add or remove the property from the wishlist
       if (isInWishlist) {
         wishlist = wishlist.filter((id) => id !== propertyId);
         wishlistBtn.classList.remove("in-wishlist");
@@ -67,22 +69,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Función para sincronizar la lista de favoritos con el servidor y recargar la página en la página de favoritos
+  // Function to sync the wishlist with the server and reload the page if needed
   function updateWishlistOnServer(wishlist) {
-    fetch("/wp-admin/admin-ajax.php", {
+    fetch(wishlistData.ajax_url, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: "action=set_wishlist_ids&wishlist_ids=" + JSON.stringify(wishlist),
+      body: `action=set_wishlist_ids&wishlist_ids=${JSON.stringify(wishlist)}&nonce=${wishlistData.nonce}`,
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Favoritos sincronizados con el servidor:", data);
 
-        // Si estamos en la página de favoritos, recargar la página después de la sincronización
+        // Reload the page if we're on the favorites page
         if (window.location.pathname === "/favoritos/") {
-          location.reload(); // Recargar la página para actualizar los ítems
+          location.reload();
         }
       })
       .catch((error) => {
