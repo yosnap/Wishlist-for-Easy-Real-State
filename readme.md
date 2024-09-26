@@ -18,3 +18,10 @@ return [
     'paged'          => get_query_var('paged', 1) // Soporte para paginación
 ];
 ```
+
+### Notas
+La ruta de favoritos tiene que ser /favoritos/
+se tiene que editar en la línea:
+```javascript
+if (window.location.pathname === "/favoritos/") {
+```
