@@ -35,7 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     wishlistBtn.addEventListener("click", function (event) {
-      event.stopPropagation();
+      // Prevent the default action (if inside an <a> tag) and stop propagation to parent elements
+      event.preventDefault(); // Prevents following the <a> link if clicked
+      event.stopPropagation(); // Prevents the event from propagating up the DOM
     });
 
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
